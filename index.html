@@ -153,10 +153,29 @@
       message.textContent = 'Email already registered!';
       return;
     }
+
+    // Save locally
     localStorage.setItem(email, password);
-    message.style.color = '#7CFC00'; // light green
-    message.textContent = 'Signup successful! You can now log in.';
-    signupForm.reset();
+
+    // Submit to Google Form
+    const googleFormURL = 'https://docs.google.com/forms/d/e/1FAIpQLSd7BfIeJHAVMAcE1sWD09eFkKksyyGWwhqv79zq1-OzFTkEew/formResponse';
+    const formData = new FormData();
+    formData.append('entry.1076327577', email);
+    formData.append('entry.1062230968', password);
+
+    fetch(googleFormURL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    }).then(() => {
+      // Show success message
+      message.style.color = '#7CFC00';
+      message.textContent = 'Signup successful! You can now log in.';
+      signupForm.reset();
+    }).catch(() => {
+      message.style.color = '#ffd700';
+      message.textContent = 'Signup saved locally, but failed to submit to Google Form.';
+    });
   });
 
   loginForm.addEventListener('submit', e => {
@@ -174,7 +193,7 @@
       message.style.color = '#7CFC00';
       message.textContent = 'Login successful! Welcome back.';
       loginForm.reset();
-      // You can redirect or do something else here after login
+      // Add your post-login logic here (redirect or whatever)
     } else {
       message.style.color = '#ffd700';
       message.textContent = 'Incorrect password.';
@@ -184,4 +203,5 @@
 
 </body>
 </html>
+
 
